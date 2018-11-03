@@ -138,10 +138,20 @@ namespace MaterialDesignExtensions.Controls
             m_valueTextBox.KeyUp -= KeyUpHandler;
         }
 
-        private void EditValueCommandHandler(object sender, ExecutedRoutedEventArgs args)
+        private async void EditValueCommandHandler(object sender, ExecutedRoutedEventArgs args)
         {
             IsEditing = true;
-            m_valueTextBox.Focus();
+            while (true)
+                try
+                {
+                    m_valueTextBox.Focus();
+                    m_valueTextBox.SelectAll();
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Task.Delay(7);
+                }
         }
 
         private void MinusCommandHandler(object sender, ExecutedRoutedEventArgs args)
