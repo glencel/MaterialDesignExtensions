@@ -120,7 +120,7 @@
                             <RowDefinition Height="25*" />
                             <RowDefinition Height="25*" />
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="2" Background="{DynamicResource MaterialDesignSeperator}" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" Height="1" />
+                        <Rectangle Grid.Row="2" Visibility="{TemplateBinding SeparatorVisibility}"  Fill="{DynamicResource MaterialDesignDivider}" Opacity="0.1" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" Height="1" />
                         <Button Grid.RowSpan="2" Style="{StaticResource MaterialDesignOverSizedNumberSpinnerPlusButton}"
                                 Background="{TemplateBinding Background}"
                                 Command="{x:Static controls:OversizedNumberSpinner.PlusCommand}">

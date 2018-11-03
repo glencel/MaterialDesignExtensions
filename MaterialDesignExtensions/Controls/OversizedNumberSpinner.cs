@@ -95,6 +95,15 @@ namespace MaterialDesignExtensions.Controls
             }
         }
 
+        public static readonly DependencyProperty SeparatorVisibilityProperty = DependencyProperty.Register(
+            "SeparatorVisibility", typeof(Visibility), typeof(OversizedNumberSpinner), new PropertyMetadata(Visibility.Visible));
+
+        public Visibility SeparatorVisibility
+        {
+            get { return (Visibility) GetValue(SeparatorVisibilityProperty); }
+            set { SetValue(SeparatorVisibilityProperty, value); }
+        }
+
         private TextBox m_valueTextBox;
 
         static OversizedNumberSpinner()
@@ -109,7 +118,6 @@ namespace MaterialDesignExtensions.Controls
             CommandBindings.Add(new CommandBinding(MinusCommand, MinusCommandHandler));
             CommandBindings.Add(new CommandBinding(PlusCommand, PlusCommandHandler));
 
-            Loaded += LoadedHandler;
             Unloaded += UnloadedHandler;
         }
 
@@ -124,16 +132,16 @@ namespace MaterialDesignExtensions.Controls
             }
 
             m_valueTextBox = Template.FindName(ValueTextBoxName, this) as TextBox;
+            m_valueTextBox.Loaded += (sender, args) =>
+            {
+                m_valueTextBox.LostFocus += LostFocusHandler;
+                m_valueTextBox.KeyUp += KeyUpHandler;
+            };
         }
-
-        private void LoadedHandler(object sender, RoutedEventArgs args)
-        {
-            m_valueTextBox.LostFocus += LostFocusHandler;
-            m_valueTextBox.KeyUp += KeyUpHandler;
-        }
-
+        
         private void UnloadedHandler(object sender, RoutedEventArgs args)
         {
+            if (m_valueTextBox == null) return;
             m_valueTextBox.LostFocus -= LostFocusHandler;
             m_valueTextBox.KeyUp -= KeyUpHandler;
         }
