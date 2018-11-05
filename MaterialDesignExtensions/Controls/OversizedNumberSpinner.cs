@@ -118,6 +118,7 @@ namespace MaterialDesignExtensions.Controls
             CommandBindings.Add(new CommandBinding(MinusCommand, MinusCommandHandler));
             CommandBindings.Add(new CommandBinding(PlusCommand, PlusCommandHandler));
 
+            Loaded += LoadedHandler;
             Unloaded += UnloadedHandler;
         }
 
@@ -132,34 +133,25 @@ namespace MaterialDesignExtensions.Controls
             }
 
             m_valueTextBox = Template.FindName(ValueTextBoxName, this) as TextBox;
-            m_valueTextBox.Loaded += (sender, args) =>
-            {
-                m_valueTextBox.LostFocus += LostFocusHandler;
-                m_valueTextBox.KeyUp += KeyUpHandler;
-            };
         }
-        
+
+        private void LoadedHandler(object sender, RoutedEventArgs args)
+        {
+            m_valueTextBox.LostFocus += LostFocusHandler;
+            m_valueTextBox.KeyUp += KeyUpHandler;
+        }
+
         private void UnloadedHandler(object sender, RoutedEventArgs args)
         {
-            if (m_valueTextBox == null) return;
             m_valueTextBox.LostFocus -= LostFocusHandler;
             m_valueTextBox.KeyUp -= KeyUpHandler;
         }
 
-        private async void EditValueCommandHandler(object sender, ExecutedRoutedEventArgs args)
+        private void EditValueCommandHandler(object sender, ExecutedRoutedEventArgs args)
         {
             IsEditing = true;
-            while (true)
-                try
-                {
-                    m_valueTextBox.Focus();
-                    m_valueTextBox.SelectAll();
-                    return;
-                }
-                catch (Exception)
-                {
-                    await Task.Delay(7);
-                }
+            m_valueTextBox.Focus();
+            m_valueTextBox.SelectAll();
         }
 
         private void MinusCommandHandler(object sender, ExecutedRoutedEventArgs args)
